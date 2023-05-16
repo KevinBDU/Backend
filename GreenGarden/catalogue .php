@@ -1,4 +1,12 @@
-<?php include 'header.php';?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 
 <body>
     <form method="post" action="">
@@ -7,7 +15,8 @@
         <input type="submit" name="search" value="Rechercher">
     </form>
 
-    <h1>Catalogue</h1>
+    <h1>Catalogue
+    </h1>
 
     <?php
     $host = "localhost";
@@ -33,10 +42,8 @@
             echo "<ul>";
             while ($row = $stmt->fetch()) {
                 echo "<li>
-            {$row['Photo']}    
-            {$row['Nom_court']}
-            {$row['Prix_Achat']}€
-            </li>";
+                <a href='consult_produit.php?id={$row['Id_Produit']}'>
+            {$row['Nom_court']}</a></li>";
             }
             echo "</ul>";
         }
@@ -48,13 +55,15 @@
             echo "<ul>";
             while ($row = $stmt->fetch()) {
                 echo "<li>
-            {$row['Nom_court']}</li>";
+              <a href='consult_produit.php?id={$row['Id_Produit']}'>
+            {$row['Nom_court']}</a></li>";
             }
             echo "</ul>";
         }
     }
 
     ?>
-<?php include 'footer.php'; ?>
+
 </body>
+
 </html>

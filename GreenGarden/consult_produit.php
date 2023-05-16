@@ -1,37 +1,71 @@
-<?php include 'header.php';
+<?php
 $host = "localhost";
 $user = "root";
 $pwd = "";
 $dbname = "greengarden";
-$sql = "select * from t_d_produit";
-$conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $pwd);
-$stmt = $conn->query($sql);
+
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $user, $pwd);
+} catch (PDOException $e) {
+    echo "Connection failed " . $e->getMessage();
+}
+
+if (isset($_GET['id'])) {
+
+    $id_produit = $_GET['id'];
+
+    try {
+        $stmt = $conn->prepare("SELECT * FROM t_d_produit where id_produit=:id");
+        $stmt->bindValue(':id', $id_produit);
+        $stmt->execute();
+        $produit = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+        $stmt = $conn->prepare("SELECT * FROM t_d_categorie where Id_Categorie=:idcat");
+        $stmt->bindValue(':idcat', $produit['Id_Categorie']);
+        $stmt->execute();
+        $categorie = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $stmt = $conn->prepare("SELECT * FROM t_d_fournisseur where Id_Fournisseur=:idfour");
+        $stmt->bindValue(':idfour', $produit['Id_Fournisseur']);
+        $stmt->execute();
+        $fournisseur = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo
+        "Erreur: " . $e->getMessage();
+        exit();
+    }
+} else {
+    echo "Produit non spécifié";
+    exit;
+}
+
 ?>
 
-<div class="row">
-    <div class="col-md-4 text-center">
-        <img width="200px" src="<?= $src; ?>">
-        <p></p>
-        <form method="post" class="form-inline">
-            <label>Qté</label>
-            <select name="quantite" class="form-control">
-                <?php
-                for ($i = 1; $i <= 10; $i++) :
-                ?>
-                <option value="<?= $i; ?>"><?= $i; ?></option>
-                <?php
-                endfor;
-                ?>
-            </select>
-            <button type="submit" class="btn btn-primary">
-                Ajouter au panier
-            </button>
-        </form>
-    </div>
-    <div class="col-md-8">
-   <?php while ($row = $stmt->fetch()) {
-         echo "{$row['Nom_Long']}"; }?>
-    </div>
-</div>
 
-<?php include 'footer.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1><?php echo $produit['Ref_fournisseur'] . " - " . $produit['Nom_court']; ?></h1>
+    <img width="200px" src="img/<?= $produit['Photo'] ?>">
+    <p>Catégorie: <?php echo $categorie['Libelle'] ?></p>
+    <p>Fournisseur: <?php echo $fournisseur['Nom_Fournisseur'] ?></p>
+    <p>Description: <?php echo $produit['Nom_Long'] ?></p>
+    <p>Prix HT: <?php echo $produit['Prix_Achat'].'€' ?></p>
+    <p>Prix TTC: <?php echo (1+$produit['Taux_TVA']/100)*($produit['Prix_Achat']).'€' ?></p>
+
+    <form method="POST" action="ajout_panier.php">
+        <input type="hidden" name="id" value="<?php echo $id_produit ?>">
+        <input type="submit" value="Ajouter au panier">
+    </form>
+</body>
+
+</html>

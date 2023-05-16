@@ -4,6 +4,7 @@ function escape_string($str)
 {
     return htmlentities(trim($str), ENT_QUOTES, "UTF-8");
 }
+
 // Fonction pour uploader un fichier sur le serveur
 function upload_file($file, $target_dir)
 {
@@ -27,7 +28,7 @@ function upload_file($file, $target_dir)
     }
 
     // Vérifier la taille du fichier
-    if ($file["size"] > 500000) {
+    if ($file["size"] > 3000000) {
         $uploadOk = 0;
     }
 
@@ -48,6 +49,38 @@ function upload_file($file, $target_dir)
     }
 }
 
+// Fonction pour télécharger un fichier du serveur
+function download_file($file_path)
+{
+    // Vérifier si le fichier existe
+    if (file_exists($file_path)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . basename($file_path));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file_path));
+        readfile($file_path);
+        exit;
+    } else {
+        return false;
+    }
+}
+
+// Fonction pour générer un PDF
+// function generate_pdf($html, $filename) {
+//     require_once('html2pdf/vendor/autoload.php');
+//     try {
+//         $pdf = new \Spipu\Html2Pdf\Html2Pdf('P', 'A4', 'fr');
+//         $pdf->writeHTML($html);
+//         $pdf->output($filename, 'D');
+//     } catch (Html2PdfException $e) {
+//         $pdf->clean();
+//         $formatter = new ExceptionFormatter($e);
+//         echo $formatter->getHtmlMessage();
+//     }
+// }
 
 // Fonction pour envoyer un mail
 function send_mail($to, $subject, $message, $headers)
@@ -68,6 +101,7 @@ function calcul_total_ttc($prix_ttc, $remise)
     $prix_ttc_final = $prix_ttc - $montant_remise;
     return $prix_ttc_final;
 }
+
 
 //   Explication de la fonction appel_api_get_json:
 //   La fonction curl_init() initialise une session cURL.
