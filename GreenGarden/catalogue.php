@@ -61,9 +61,8 @@
             echo "</ul>";
         }
     }
-
     ?>
-
+    <a href="panier.php">Mon Panier</a>
 </body>
 
 </html>
