@@ -5,12 +5,12 @@ if (session_status() == PHP_SESSION_NONE) {
 
 if (!isset($_SESSION['panier'])) {
     header('Location: catalogue.php');
-    exit;
+    exit();
 }
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header('Location: login.php');
-    exit;
+    exit();
 }
 
 include 'dao.php';

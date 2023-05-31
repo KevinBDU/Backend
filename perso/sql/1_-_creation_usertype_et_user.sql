@@ -11,7 +11,9 @@ insert into t_d_usertype(Id_UserType,Libelle)
 values (1,
         'Client'), (2,
                     'Admin'), (3,
-                               'Commercial');
+                               'Commercial'),
+                                              (4,
+                                              'Technicien SAV');
 
 
 create table t_d_user(Id_User int(11) not null, Id_UserType int(11) not null, Login varchar(255) not null, Password varchar(255) not null);
