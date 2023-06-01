@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 09 mai 2023 à 15:44
--- Version du serveur : 10.4.24-MariaDB
--- Version de PHP : 8.1.6
+-- Généré le : mer. 31 mai 2023 à 23:32
+-- Version du serveur : 10.4.28-MariaDB
+-- Version de PHP : 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,6 +24,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `categorie_prod`
+--
+
+CREATE TABLE `categorie_prod` (
+  `cate_num` int(11) NOT NULL,
+  `cate_design` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `t_d_adresse`
 --
 
@@ -35,7 +46,7 @@ CREATE TABLE `t_d_adresse` (
   `CP_Adresse` varchar(50) NOT NULL,
   `Ville_Adresse` varchar(150) NOT NULL,
   `Id_Client` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_adresse`
@@ -57,7 +68,7 @@ CREATE TABLE `t_d_adressecommande` (
   `Id_Commande` int(11) NOT NULL,
   `Id_Adresse` int(11) NOT NULL,
   `Id_Type` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_adressecommande`
@@ -83,7 +94,7 @@ CREATE TABLE `t_d_categorie` (
   `Id_Categorie` int(11) NOT NULL,
   `Libelle` varchar(50) NOT NULL,
   `Id_Categorie_Parent` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_categorie`
@@ -101,7 +112,9 @@ INSERT INTO `t_d_categorie` (`Id_Categorie`, `Libelle`, `Id_Categorie_Parent`) V
 (9, 'Fleur', 6),
 (10, 'Pot', NULL),
 (11, 'Luminaire Solaire', NULL),
-(12, 'Tuyau d\'arrosage', NULL);
+(12, 'Tuyau d\'arrosage', NULL),
+(13, 'salon jardin', NULL),
+(14, 'vkjhl', 10);
 
 -- --------------------------------------------------------
 
@@ -119,17 +132,18 @@ CREATE TABLE `t_d_client` (
   `Id_Commercial` int(11) NOT NULL,
   `Id_Type_Client` int(11) NOT NULL,
   `DelaiPaiement_Client` int(11) NOT NULL,
-  `Num_Client` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `Num_Client` varchar(45) NOT NULL,
+  `Id_User` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_client`
 --
 
-INSERT INTO `t_d_client` (`Id_Client`, `Nom_Societe_Client`, `Nom_Client`, `Prenom_Client`, `Mail_Client`, `Tel_Client`, `Id_Commercial`, `Id_Type_Client`, `DelaiPaiement_Client`, `Num_Client`) VALUES
-(2, 'Gamm Vert', NULL, NULL, 'conches@gammvert.fr', NULL, 1, 2, 30, 'CLI0000001'),
-(3, NULL, 'Truc', 'Muche', 'trucmuche@yahoo.fr', '0123456789', 1, 1, 0, 'CLI0000002'),
-(4, NULL, 'Gonzales', 'Roberto', 'robertogonzales@gmail.com.fr', '0987654321', 2, 1, 0, 'CLI0000003');
+INSERT INTO `t_d_client` (`Id_Client`, `Nom_Societe_Client`, `Nom_Client`, `Prenom_Client`, `Mail_Client`, `Tel_Client`, `Id_Commercial`, `Id_Type_Client`, `DelaiPaiement_Client`, `Num_Client`, `Id_User`) VALUES
+(2, 'Gamm Vert', NULL, NULL, 'conches@gammvert.fr', NULL, 1, 2, 30, 'CLI0000001', 9),
+(3, NULL, 'Truc', 'Muche', 'trucmuche@yahoo.fr', '0123456789', 1, 1, 0, 'CLI0000002', 10),
+(4, NULL, 'Gonzales', 'Roberto', 'robertogonzales@gmail.com.fr', '0987654321', 2, 1, 0, 'CLI0000003', 11);
 
 --
 -- Déclencheurs `t_d_client`
@@ -161,17 +175,17 @@ CREATE TABLE `t_d_commande` (
   `Id_Client` int(11) NOT NULL,
   `Id_TypePaiement` int(11) NOT NULL,
   `Remise_Commande` decimal(18,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_commande`
 --
 
 INSERT INTO `t_d_commande` (`Id_Commande`, `Num_Commande`, `Date_Commande`, `Id_Statut`, `Id_Client`, `Id_TypePaiement`, `Remise_Commande`) VALUES
-(1, 'CMD0000001', '2022-02-01 14:09:08', 2, 2, 2, '0.00'),
-(2, 'CMD0000002', '2022-02-03 07:09:35', 6, 2, 2, '10.00'),
-(3, 'CMD0000003', '2023-04-01 12:10:08', 5, 3, 1, '0.00'),
-(4, 'CMD0000004', '2023-05-03 21:24:28', 4, 4, 2, '0.00');
+(1, 'CMD0000001', '2022-02-01 14:09:08', 2, 2, 2, 0.00),
+(2, 'CMD0000002', '2022-02-03 07:09:35', 6, 2, 2, 10.00),
+(3, 'CMD0000003', '2023-04-01 12:10:08', 5, 3, 1, 0.00),
+(4, 'CMD0000004', '2023-05-03 21:24:28', 4, 4, 2, 0.00);
 
 --
 -- Déclencheurs `t_d_commande`
@@ -205,7 +219,7 @@ DELIMITER ;
 CREATE TABLE `t_d_commercial` (
   `Id_Commercial` int(11) NOT NULL,
   `Nom_Commercial` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_commercial`
@@ -225,7 +239,7 @@ CREATE TABLE `t_d_expedition` (
   `Id_Expedition` int(11) NOT NULL,
   `Date_Expedition` datetime DEFAULT NULL,
   `NumBL` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_expedition`
@@ -265,7 +279,7 @@ CREATE TABLE `t_d_facture` (
   `NumFacture` varchar(150) NOT NULL,
   `Date_Facture` datetime NOT NULL,
   `Id_Commande` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_facture`
@@ -302,7 +316,7 @@ DELIMITER ;
 CREATE TABLE `t_d_fournisseur` (
   `Id_Fournisseur` int(11) NOT NULL,
   `Nom_Fournisseur` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_fournisseur`
@@ -311,7 +325,11 @@ CREATE TABLE `t_d_fournisseur` (
 INSERT INTO `t_d_fournisseur` (`Id_Fournisseur`, `Nom_Fournisseur`) VALUES
 (1, 'Pierre'),
 (2, 'Paul'),
-(3, 'Jacques');
+(3, 'Jacques'),
+(4, 'Bernard'),
+(5, 'Jacob'),
+(6, 'Adrien'),
+(7, 'truc');
 
 -- --------------------------------------------------------
 
@@ -324,7 +342,7 @@ CREATE TABLE `t_d_lignecommande` (
   `Id_Produit` int(11) NOT NULL,
   `Id_Expedition` int(11) UNSIGNED NOT NULL,
   `Quantite` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_lignecommande`
@@ -354,19 +372,22 @@ CREATE TABLE `t_d_produit` (
   `Prix_Achat` decimal(15,2) NOT NULL,
   `Id_Fournisseur` int(11) NOT NULL,
   `Id_Categorie` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_produit`
 --
 
 INSERT INTO `t_d_produit` (`Id_Produit`, `Taux_TVA`, `Nom_Long`, `Nom_court`, `Ref_fournisseur`, `Photo`, `Prix_Achat`, `Id_Fournisseur`, `Id_Categorie`) VALUES
-(1, '5.50', 'Bêche pour quelqu\'un qui serait assez grand, genre', 'Bêche pour grand', 'BZFR1589', 'photo1.jpg', '14.90', 1, 2),
-(2, '5.50', 'Bêche pour quelqu\'un qui serait assez petit, genre', 'Bêche pour petit', 'BZFR1592', 'photo2.jpg', '9.90', 1, 2),
-(3, '5.50', 'Le plant d\'aubergine qui déchire sa grand Mère', 'Plant Aubergine', 'JAFR1589', 'photo3.jpg', '1.90', 2, 7),
-(4, '5.50', 'Le plant de fraises qui déchire sa grand Mère', 'Plant Fraises', 'JAFR26895', 'photo4.jpg', '1.90', 2, 8),
-(5, '19.60', 'Le set de 10 lampes qui permet d\'éclairer ton allé', 'Set de 10 lampes', 'LAM0001', 'photo5.jpg', '49.90', 3, 11),
-(6, '19.60', 'Le tuyau d\'arrosage dexception qui s\'allonge et se', 'Tuyai 20m', 'TUY0001', 'photo6.jpg', '24.90', 3, 12);
+(1, 5.50, 'Bêche pour quelqu\'un qui serait assez grand, genre', 'Bêche pour grand', 'BZFR1589', 'image1.jpg', 14.90, 1, 2),
+(2, 5.50, 'Bêche pour quelqu\'un qui serait assez petit, genre', 'Bêche pour petit', 'BZFR1592', 'image2.jpg', 9.90, 1, 2),
+(3, 5.50, 'Le plant d\'aubergine qui déchire sa grand Mère', 'Plant Aubergine', 'JAFR1589', 'image3.jpg', 1.90, 2, 7),
+(4, 5.50, 'Le plant de fraises qui déchire sa grand Mère', 'Plant Fraises', 'JAFR26895', 'image4.jpg', 1.90, 2, 8),
+(5, 19.60, 'Le set de 10 lampes qui permet d\'éclairer ton allé', 'Set de 10 lampes', 'LAM0001', 'image5.jpg', 49.90, 3, 11),
+(6, 19.60, 'Le tuyau d\'arrosage dexception qui s\'allonge et se', 'Tuyai 20m', 'TUY0001', 'image6.jpg', 24.90, 3, 12),
+(7, 5.50, 'plant d\'arbre de cerisier superbe', 'cerisier', '56892', 'cerisier.jpg', 12.50, 1, 6),
+(8, 5.50, 'salade batavia de couleur verte', 'salade', '56895', 'salade-laitue.jpg', 15.23, 3, 7),
+(9, 5.50, 'outil complet de jardinage', 'outil', 'O2545', 'outillage.jpg', 15.50, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -377,7 +398,7 @@ INSERT INTO `t_d_produit` (`Id_Produit`, `Taux_TVA`, `Nom_Long`, `Nom_court`, `R
 CREATE TABLE `t_d_statut_commande` (
   `Id_Statut` int(11) NOT NULL,
   `Libelle_Statut` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_statut_commande`
@@ -394,13 +415,74 @@ INSERT INTO `t_d_statut_commande` (`Id_Statut`, `Libelle_Statut`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `t_d_statut_ticket`
+--
+
+CREATE TABLE `t_d_statut_ticket` (
+  `Id_Statut` int(11) NOT NULL,
+  `Libelle_Statut` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `t_d_statut_ticket`
+--
+
+INSERT INTO `t_d_statut_ticket` (`Id_Statut`, `Libelle_Statut`) VALUES
+(1, 'créés'),
+(2, 'suivis'),
+(3, 'résolus');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `t_d_ticket`
+--
+
+CREATE TABLE `t_d_ticket` (
+  `Id_Ticket` int(11) NOT NULL,
+  `Num_Ticket` varchar(50) NOT NULL,
+  `Date_Ticket` datetime NOT NULL,
+  `Id_Statut` int(11) NOT NULL,
+  `Id_Type` int(11) NOT NULL,
+  `Id_User` int(11) NOT NULL,
+  `Id_Commande` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `t_d_ticket`
+--
+
+INSERT INTO `t_d_ticket` (`Id_Ticket`, `Num_Ticket`, `Date_Ticket`, `Id_Statut`, `Id_Type`, `Id_User`, `Id_Commande`) VALUES
+(3, 'TKT0000001', '2023-05-31 21:22:26', 1, 1, 12, 1),
+(4, 'TKT0000002', '2023-05-31 21:28:01', 1, 1, 12, 1),
+(5, 'TKT0000003', '2023-05-31 21:37:53', 1, 1, 12, 1);
+
+--
+-- Déclencheurs `t_d_ticket`
+--
+DELIMITER $$
+CREATE TRIGGER `tr_generate_num_ticket` BEFORE INSERT ON `t_d_ticket` FOR EACH ROW BEGIN
+    DECLARE prefix CHAR(3) DEFAULT 'TKT';
+    DECLARE num INT;
+
+    SELECT COUNT(*) INTO num FROM t_d_ticket;
+    SET num = num + 1;
+
+    SET NEW.num_ticket = CONCAT(prefix, LPAD(num, 7, '0'));
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `t_d_type_adresse`
 --
 
 CREATE TABLE `t_d_type_adresse` (
   `Id_Type` int(11) NOT NULL,
   `Libelle_Type` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_type_adresse`
@@ -420,15 +502,15 @@ CREATE TABLE `t_d_type_client` (
   `Id_Type_Client` int(11) NOT NULL,
   `Libelle_Type_Client` varchar(50) NOT NULL,
   `Taux_Penalite_Retard` decimal(15,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_type_client`
 --
 
 INSERT INTO `t_d_type_client` (`Id_Type_Client`, `Libelle_Type_Client`, `Taux_Penalite_Retard`) VALUES
-(1, 'Particulier', '15.00'),
-(2, 'Professionnel', '10.00');
+(1, 'Particulier', 15.00),
+(2, 'Professionnel', 10.00);
 
 -- --------------------------------------------------------
 
@@ -439,7 +521,7 @@ INSERT INTO `t_d_type_client` (`Id_Type_Client`, `Libelle_Type_Client`, `Taux_Pe
 CREATE TABLE `t_d_type_paiement` (
   `Id_TypePaiement` int(11) NOT NULL,
   `Libelle_TypePaiement` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `t_d_type_paiement`
@@ -451,9 +533,83 @@ INSERT INTO `t_d_type_paiement` (`Id_TypePaiement`, `Libelle_TypePaiement`) VALU
 (3, 'Espèces'),
 (4, 'Virement');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `t_d_type_ticket`
+--
+
+CREATE TABLE `t_d_type_ticket` (
+  `Id_Type` int(11) NOT NULL,
+  `Libelle_Type` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `t_d_type_ticket`
+--
+
+INSERT INTO `t_d_type_ticket` (`Id_Type`, `Libelle_Type`) VALUES
+(1, 'NPAI'),
+(2, 'Abscence');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `t_d_user`
+--
+
+CREATE TABLE `t_d_user` (
+  `Id_User` int(11) NOT NULL,
+  `Id_UserType` int(11) NOT NULL,
+  `Login` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `t_d_user`
+--
+
+INSERT INTO `t_d_user` (`Id_User`, `Id_UserType`, `Login`, `Password`) VALUES
+(6, 2, 'TATA', '$2y$10$aC4sCJlum9Zp63vhHKOkVujK.AWfa7jfxD8BRIrwFCFELqRT2xlF6'),
+(7, 3, 'TETE', '$2y$10$z2z7FxPovBu1SlWA7oMT/.rctEvtEiwJtbO/eBZmu9r81lsmHYMOG'),
+(8, 3, 'TITI', '$2y$10$6EabTUlCTQVT.a0ZdfOWMuOs3LYq8o2Oxl/xN9epYupLwLwJL6pjS'),
+(9, 1, 'TOTO', '$2y$10$07FPoi9z02DuEHAnlKxSE.a0r.YLQwe84aV7QtWTrvhImJAgic49u'),
+(10, 1, 'TUTU', '$2y$10$0O/xFt0eOUI6/PXGtQhVL.JP1wz9V1FCgrRsaeAdRKrxKLiyHPpuO'),
+(11, 1, 'TYTY', '$2y$10$hGb/AE49YYEHxglXywz9OO4IhzNTgN4.98vxVlWg0jmxGx4BsRVd6'),
+(12, 4, 'SAV1', '$2y$10$pIt6B3QlwmYqzOvRe88Lkemeg.4u0clSs9ylAKld085y/dQ3zrxxS'),
+(13, 4, 'SAV2', '$2y$10$UYLngQ2KaPGM6A6PFpXKjusNZDglrOfPbQBsbBCpEtjM5Uf7PnE2K'),
+(14, 4, 'SAV3', '$2y$10$4zDyEg8xh6I.wrjFsHJc2.KK5NN8OGTlmQu9b95z7TZrW8ihCKvYi');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `t_d_usertype`
+--
+
+CREATE TABLE `t_d_usertype` (
+  `Id_UserType` int(11) NOT NULL,
+  `Libelle` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `t_d_usertype`
+--
+
+INSERT INTO `t_d_usertype` (`Id_UserType`, `Libelle`) VALUES
+(1, 'Client'),
+(2, 'Admin'),
+(3, 'Commercial'),
+(4, 'SAV');
+
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `categorie_prod`
+--
+ALTER TABLE `categorie_prod`
+  ADD PRIMARY KEY (`cate_num`);
 
 --
 -- Index pour la table `t_d_adresse`
@@ -483,7 +639,8 @@ ALTER TABLE `t_d_categorie`
 ALTER TABLE `t_d_client`
   ADD PRIMARY KEY (`Id_Client`),
   ADD KEY `Id_Commercial` (`Id_Commercial`),
-  ADD KEY `Id_Type_Client` (`Id_Type_Client`);
+  ADD KEY `Id_Type_Client` (`Id_Type_Client`),
+  ADD KEY `t_d_client_ibfk_3` (`Id_User`);
 
 --
 -- Index pour la table `t_d_commande`
@@ -542,6 +699,22 @@ ALTER TABLE `t_d_statut_commande`
   ADD PRIMARY KEY (`Id_Statut`);
 
 --
+-- Index pour la table `t_d_statut_ticket`
+--
+ALTER TABLE `t_d_statut_ticket`
+  ADD PRIMARY KEY (`Id_Statut`);
+
+--
+-- Index pour la table `t_d_ticket`
+--
+ALTER TABLE `t_d_ticket`
+  ADD PRIMARY KEY (`Id_Ticket`),
+  ADD KEY `Id_Statut` (`Id_Statut`),
+  ADD KEY `Id_Motif` (`Id_Type`),
+  ADD KEY `Id_User` (`Id_User`),
+  ADD KEY `t_d_ticket_ibfk_4` (`Id_Commande`);
+
+--
 -- Index pour la table `t_d_type_adresse`
 --
 ALTER TABLE `t_d_type_adresse`
@@ -560,8 +733,26 @@ ALTER TABLE `t_d_type_paiement`
   ADD PRIMARY KEY (`Id_TypePaiement`);
 
 --
+-- Index pour la table `t_d_type_ticket`
+--
+ALTER TABLE `t_d_type_ticket`
+  ADD PRIMARY KEY (`Id_Type`);
+
+--
+-- Index pour la table `t_d_user`
+--
+ALTER TABLE `t_d_user`
+  ADD PRIMARY KEY (`Id_User`);
+
+--
 -- AUTO_INCREMENT pour les tables déchargées
 --
+
+--
+-- AUTO_INCREMENT pour la table `categorie_prod`
+--
+ALTER TABLE `categorie_prod`
+  MODIFY `cate_num` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `t_d_adresse`
@@ -573,7 +764,7 @@ ALTER TABLE `t_d_adresse`
 -- AUTO_INCREMENT pour la table `t_d_categorie`
 --
 ALTER TABLE `t_d_categorie`
-  MODIFY `Id_Categorie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Id_Categorie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `t_d_client`
@@ -609,19 +800,31 @@ ALTER TABLE `t_d_facture`
 -- AUTO_INCREMENT pour la table `t_d_fournisseur`
 --
 ALTER TABLE `t_d_fournisseur`
-  MODIFY `Id_Fournisseur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `Id_Fournisseur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `t_d_produit`
 --
 ALTER TABLE `t_d_produit`
-  MODIFY `Id_Produit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Id_Produit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `t_d_statut_commande`
 --
 ALTER TABLE `t_d_statut_commande`
   MODIFY `Id_Statut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT pour la table `t_d_statut_ticket`
+--
+ALTER TABLE `t_d_statut_ticket`
+  MODIFY `Id_Statut` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT pour la table `t_d_ticket`
+--
+ALTER TABLE `t_d_ticket`
+  MODIFY `Id_Ticket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `t_d_type_adresse`
@@ -640,6 +843,18 @@ ALTER TABLE `t_d_type_client`
 --
 ALTER TABLE `t_d_type_paiement`
   MODIFY `Id_TypePaiement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT pour la table `t_d_type_ticket`
+--
+ALTER TABLE `t_d_type_ticket`
+  MODIFY `Id_Type` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT pour la table `t_d_user`
+--
+ALTER TABLE `t_d_user`
+  MODIFY `Id_User` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Contraintes pour les tables déchargées
@@ -670,7 +885,8 @@ ALTER TABLE `t_d_categorie`
 --
 ALTER TABLE `t_d_client`
   ADD CONSTRAINT `t_d_client_ibfk_1` FOREIGN KEY (`Id_Commercial`) REFERENCES `t_d_commercial` (`Id_Commercial`),
-  ADD CONSTRAINT `t_d_client_ibfk_2` FOREIGN KEY (`Id_Type_Client`) REFERENCES `t_d_type_client` (`Id_Type_Client`);
+  ADD CONSTRAINT `t_d_client_ibfk_2` FOREIGN KEY (`Id_Type_Client`) REFERENCES `t_d_type_client` (`Id_Type_Client`),
+  ADD CONSTRAINT `t_d_client_ibfk_3` FOREIGN KEY (`Id_User`) REFERENCES `t_d_user` (`Id_User`);
 
 --
 -- Contraintes pour la table `t_d_commande`
@@ -699,6 +915,15 @@ ALTER TABLE `t_d_lignecommande`
 ALTER TABLE `t_d_produit`
   ADD CONSTRAINT `t_d_produit_ibfk_1` FOREIGN KEY (`Id_Fournisseur`) REFERENCES `t_d_fournisseur` (`Id_Fournisseur`),
   ADD CONSTRAINT `t_d_produit_ibfk_2` FOREIGN KEY (`Id_Categorie`) REFERENCES `t_d_categorie` (`Id_Categorie`);
+
+--
+-- Contraintes pour la table `t_d_ticket`
+--
+ALTER TABLE `t_d_ticket`
+  ADD CONSTRAINT `t_d_ticket_ibfk_1` FOREIGN KEY (`Id_Statut`) REFERENCES `t_d_statut_ticket` (`Id_Statut`),
+  ADD CONSTRAINT `t_d_ticket_ibfk_2` FOREIGN KEY (`Id_Type`) REFERENCES `t_d_type_ticket` (`Id_Type`),
+  ADD CONSTRAINT `t_d_ticket_ibfk_3` FOREIGN KEY (`Id_User`) REFERENCES `t_d_user` (`Id_User`),
+  ADD CONSTRAINT `t_d_ticket_ibfk_4` FOREIGN KEY (`Id_Commande`) REFERENCES `t_d_commande` (`Id_Commande`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

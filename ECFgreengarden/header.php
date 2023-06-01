@@ -48,6 +48,12 @@
             </li>';
             }
 
+            if(isset($_SESSION['user_type']) && ($_SESSION['user_type'] === 'SAV' || $_SESSION['user_type'] === 'Commercial')) {
+              echo ' <li class="nav-item">
+              <a class="nav-link" href="ajout_ticket.php">Espace SAV</a>
+            </li>';
+            }
+
             ?>
           
             <li class="nav-item">

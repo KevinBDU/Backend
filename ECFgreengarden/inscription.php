@@ -1,8 +1,6 @@
 <?php
-// Démarrage de la session
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+include 'header.php';
+
 
 // Vérification si l'utilisateur est déjà connecté
 if (isset($_SESSION['user_id'])) {
@@ -13,6 +11,7 @@ if (isset($_SESSION['user_id'])) {
 // Traitement de la soumission du formulaire d'inscription
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	// Récupération des données du formulaire en méthode POST
+
 	$login = $_POST['login'];
 	$password = $_POST['password'];
 
@@ -77,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<label for="password">Mot de passe :</label>
 		<input type="password" id="password" name="password" required><br>
 		<input type="submit" value="S'inscrire">
+
 	</form>
 	<p>Déjà inscrit ? <a href="login.php">Se connecter</a></p>
 </body>

@@ -11,7 +11,8 @@ insert into t_d_usertype(Id_UserType,Libelle)
 values (1,
         'Client'), (2,
                     'Admin'), (3,
-                               'Commercial');
+                               'Commercial'), (4, 
+                                               'SAV');
 
 
 create table t_d_user(Id_User int(11) not null, Id_UserType int(11) not null, Login varchar(255) not null, Password varchar(255) not null);
@@ -22,6 +23,8 @@ ALTER TABLE `t_d_user` ADD PRIMARY KEY (`Id_User`);
 
 ALTER TABLE `t_d_user` MODIFY `Id_User` int(11) NOT NULL AUTO_INCREMENT,
                                                          AUTO_INCREMENT=6;
+
+
 
 
 ALTER TABLE `t_d_user` ADD CONSTRAINT `t_d_user_ibfk_1`

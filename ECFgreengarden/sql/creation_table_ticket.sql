@@ -8,14 +8,18 @@ CREATE TABLE `t_d_statut_ticket` (
   PRIMARY KEY (`Id_Statut`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `t_d_statut_ticket`(Id_Statut, Libelle_Statut) values (1, 'créés'), (2, 'suivis'), (3, 'résolus');
 
-DROP TABLE IF EXISTS `t_d_motif_ticket`;
 
-CREATE TABLE `t_d_motif_ticket` (
-  `Id_Motif` int(11) NOT NULL AUTO_INCREMENT,
-  `Libelle_Statut` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`Id_Motif`)
+DROP TABLE IF EXISTS `t_d_type_ticket`;
+
+CREATE TABLE `t_d_type_ticket` (
+  `Id_Type` int(11) NOT NULL AUTO_INCREMENT,
+  `Libelle_Type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`Id_Type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `t_d_type_ticket`(Id_Type, Libelle_Type) values (1, 'NPAI'), (2, 'Abscence');
 
 
 /*Table structure for table `t_d_ticket` */
@@ -30,14 +34,14 @@ CREATE TABLE `t_d_ticket` (
   `Titre_Ticket` varchar(50) NOT NULL,
   `Text_Ticket` varchar(255) NOT NULL,
   `Id_Statut` int(11) NOT NULL,
-  `Id_Motif` int(11) NOT NULL,
+  `Id_Type` int(11) NOT NULL,
   `Id_User` int(11) NOT NULL,
   PRIMARY KEY (`Id_Ticket`),
   KEY `Id_Statut` (`Id_Statut`),
-  KEY `Id_Motif` (`Id_Motif`),
+  KEY `Id_Type` (`Id_Type`),
   KEY `Id_User` (`Id_User`),
   CONSTRAINT `t_d_ticket_ibfk_1` FOREIGN KEY (`Id_Statut`) REFERENCES `t_d_statut_ticket` (`Id_Statut`),
-  CONSTRAINT `t_d_ticket_ibfk_2` FOREIGN KEY (`Id_Motif`) REFERENCES `t_d_motif_ticket` (`Id_Motif`),
+  CONSTRAINT `t_d_ticket_ibfk_2` FOREIGN KEY (`Id_Type`) REFERENCES `t_d_type_ticket` (`Id_Type`),
   CONSTRAINT `t_d_ticket_ibfk_3` FOREIGN KEY (`Id_User`) REFERENCES `t_d_user` (`Id_User`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
