@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %} Liste des taches {% endblock %}
+
+{% block body %}
+<a href="{{path('task_create')}}" class="btn btn-primary" title="add">Ajouter</a>
+
+<table id="example" class="table table-striped table-bordered"
+style="width:100%">
+ <thead>
+ <tr>
+ <th>Id</th>
+ <th>Nom</th>
+ <th>Date effective</th>
+ <th>Priorité</th>
+ <th>Catégorie</th>
+ <th></th>
+ <th></th>
+ </tr>
+ </thead>
+ <tbody>
+ {% if tasks is defined %}
+    {% for task in tasks %}
+    <tr>
+
+ <th scope="row">{{ task.idTask }}</th>
+ <td>{{ task.nameTask }}</td>
+ <td>{{ task.dueDateTask|date('d/m/Y H:i') }}</td>
+ <td>{{ task.priorityTask }}</td>
+ <td>{{ task.category.getLibelleCategory() }}</td>
+ <td><a href="{{path('task_edit', {'id':task.idTask}) }}" class="btn btn-primary" title="edit">Editer</a></td>
+ <td><a href="{{path('task_delete', {'id':task.idTask}) }}" class="btn btn-danger" title="delete">Supprimer</a></td>
+
+ </tr>
+{% endfor %}
+ {% endif %}
+
+ </tbody>
+ <tfoot>
+ <tr>
+ <th>Id</th>
+ <th>Nom</th>
+ <th>Date effective</th>
+ <th>Priorité</th>
+ <th>Catégorie</th>
+ <th></th>
+ <th></th>
+ </tr>
+ </tfoot>
+ </table>
+ 
+{% endblock %}
+{% block javascripts %}
+ <script>
+ $(document).ready(function() {
+ $('#example').DataTable();
+ } );
+ </script>
+{% endblock %}
